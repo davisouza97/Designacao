@@ -1,9 +1,6 @@
+/*jshint esversion: 6 */
 const designacao = {
-    matriz: [
-        [15, 10, 9],
-        [10, 15, 12],
-        [9, 10, 8]
-    ],
+    matriz: [],
     matrizCor: [
         [0, 0, 0],
         [0, 0, 0],
@@ -14,6 +11,10 @@ const designacao = {
         [1, 1, 1],
         [1, 1, 1]
     ],
+    criaMatriz: function (matrizEntrada) {
+        this.matriz = matrizEntrada;
+    },
+    
     imprimeMatriz: function () {
         for (let i = 0; i < this.matriz.length; i++) {
             for (let j = 0; j < this.matriz[0].length; j++) {
@@ -22,16 +23,14 @@ const designacao = {
             console.log("");
         }
     },
-    passoUm: function () {
+    subtraiCustoLinha: function () {
         console.log("identifique o menor custo de cada linha e o subtraia de cada um dos custos da linha " + this.matriz.length);
         for (let i = 0; i < this.matriz.length; i++) {
-            //console.log(this.matriz[i]);
             var min = Math.min(...this.matriz[i]);
-            //console.log(min);
             this.matriz[i] = this.matriz[i].map(item => item - min);
         }
     },
-    passoDois: function () {
+    atribuicao: function () {
         console.log("Tente fazer a atribuição dos custos iguais a zero.");
         var numeroZerosLinha = Array(this.matriz.length);
         //encontra e conta numero de zeros por linha
@@ -56,11 +55,11 @@ const designacao = {
         }
         console.log(numeroZerosLinha);
     },
-    passoTres: function () {
+    subtraiCustoColuna: function () {
         console.log("Subtraia o menor custo de cada coluna de cada custo da coluna");
         for (let i = 0; i < this.matriz[0].length; i++) {
-            let menorValorColuna = this.getMenorColuna(i);
-            this.subtraiColuna(i,menorValorColuna);
+            let menorValorColuna = this.getMenorValorColuna(i);
+            this.subtraiColuna(i, menorValorColuna);
         }
     },
     setLinhaDesignacao: function (linha, coluna) {
@@ -81,7 +80,7 @@ const designacao = {
             }
         }
     },
-    getMenorColuna: function (coluna) {
+    getMenorValorColuna: function (coluna) {
         let numColunas = this.matriz[0].length;
         let listaColuna = [];
         for (let j = 0; j < numColunas; j++) {
@@ -107,8 +106,8 @@ const designacao = {
         return true;
     },
     teste: function () {
-        this.passoUm();
-        this.passoDois();
-        this.passoTres();
+        this.subtraiCustoLinha();
+        this.atribuicao();
+        this.subtraiCustoColuna();
     }
 };

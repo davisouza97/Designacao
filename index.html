@@ -11,21 +11,50 @@
         td {
             border: 1px solid black;
         }
+
+        .div-table {
+            display: table;
+            width: auto;
+            background-color: #eee;
+            border: 1px solid #666666;
+            border-spacing: 5px;
+            /* cellspacing:poor IE support for  this */
+        }
+
+        .div-table-row {
+            display: table-row;
+            width: auto;
+            clear: both;
+        }
+
+        .div-table-col {
+            float: left;
+            /* fix for  buggy browsers */
+            display: table-column;
+            width: 200px;
+            background-color: #ccc;
+        }
     </style>
 </head>
 
 <body>
-
+    <form id="form">
+        <table id="tabela">
+            <tbody id="tbody"></tbody>
+        </table>
+    </form>
     <div>
         <button id="addLinha" onclick="addLinha()">+ linha</button>
         <button id="addColuna" onclick="addColuna()">+ coluna</button>
         <button id="setId" onclick="setIdInput()"> setIdInput</button>
     </div>
+    <div>
+        <button id="start" onclick="start()"> start</button>
+    </div>
 
-    <table id="tabela">
-        <tbody id="tbody"></tbody>
-    </table>
+    <div id="render">
 
+    </div>
     <script src="designacao.js"></script>
     <script src="main.js"></script>
 </body>
