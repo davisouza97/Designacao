@@ -5,11 +5,13 @@ var render = document.getElementById("render");
 var qtdLinhas = 0;
 var qtdColunas = 0;
 var matrizOriginal;
-//var row = prompt("Informe o numero de linhas");
-//var col = prompt("Informe o numero de linhas");
 
-var col = 2;
-var row = 2;
+var col = 3;
+var row = 3;
+var row = prompt("Informe o numero de linhas");
+var col = prompt("Informe o numero de linhas");
+
+
 
 montaTabela(row, col);
 
@@ -17,11 +19,9 @@ function start() {
     var x = document.forms['form'];
     let criaMatriz = [];
     let criaLinha = [];
-    let indexColuna = qtdColunas - 1;
-    let itensPorColuna = x.length / qtdColunas;
     for (i = 0, j = 1; i < x.length; i++, j++) { //itera sobre os inputs
         criaLinha.push(x.elements[i].value);
-        if (j === itensPorColuna) {
+        if (j === qtdColunas) {
             criaMatriz.push(criaLinha);
             criaLinha = [];
             j = 0;
@@ -29,7 +29,13 @@ function start() {
     }
     designacao.criaMatriz(criaMatriz);
     matrizOriginal = designacao.matriz;
+    let entrada = document.getElementById("entrada");
+    
     renderMatriz();
+    while (entrada.firstChild) {
+        entrada.removeChild(entrada.firstChild);
+    }
+    
 }
 
 function montaTabela(row, col) {
@@ -108,4 +114,12 @@ function renderMatriz() {
         }
     }
     render.appendChild(tabela);
+    let botao = document.createElement("button");
+    botao.setAttribute("onclick",next);
+    render.appendChild(botao);
+}
+
+function next() {
+    designacao.subtraiCustoColuna();
+    renderMatriz();
 }

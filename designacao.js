@@ -11,10 +11,12 @@ const designacao = {
         [1, 1, 1],
         [1, 1, 1]
     ],
+    itensLinha: [],
+    itensColuna: [],
     criaMatriz: function (matrizEntrada) {
         this.matriz = matrizEntrada;
     },
-    
+
     imprimeMatriz: function () {
         for (let i = 0; i < this.matriz.length; i++) {
             for (let j = 0; j < this.matriz[0].length; j++) {
