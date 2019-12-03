@@ -11,10 +11,12 @@ const designacao = {
         [1, 1, 1],
         [1, 1, 1]
     ],
+    matrizOriginal:[],
     itensLinha: [],
     itensColuna: [],
     criaMatriz: function (matrizEntrada) {
         this.matriz = matrizEntrada;
+        this.matrizOriginal = matrizEntrada;
     },
 
     imprimeMatriz: function () {
@@ -24,6 +26,21 @@ const designacao = {
             }
             console.log("");
         }
+    },
+    getMenorPorLinha: function () {
+        let menorByLinha = [];
+        for (let i = 0; i < this.matriz.length; i++) {
+            menorByLinha.push(Math.min(...this.matriz[i]));
+        }
+        return menorByLinha;
+    },
+
+    getMenorPorColuna: function () {
+        let menorByColuna = [];
+        for (let i = 0; i < this.matriz.length; i++) {
+            menorByColuna.push(designacao.getMenorValorColuna(i));
+        }
+        return menorByColuna;
     },
     subtraiCustoLinha: function () {
         console.log("identifique o menor custo de cada linha e o subtraia de cada um dos custos da linha " + this.matriz.length);
