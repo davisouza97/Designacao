@@ -12,37 +12,40 @@
 
 <body>
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper teal lighten-2">
             <a href="#" class="brand-logo center">Designação</a>
         </div>
     </nav>
+    <div class="row">
 
-    <div class="row" id="linha0">
-        <div class="col s2">
+        <div class="col s2"></div>
+        <div class="col s8">
+            <div class="row" id="linha0">
+                <div class="col s2">
+                </div>
+                <div class="col s8" id="cima">
+                </div>
+            </div>
+            <div class="row" id="linha1">
+                <div class="col s2" id="lado">
+                </div>
+                <div class="col s8" id="tabelaPai">
+                    <form id="tabela" class="card-panel"></form>
+                </div>
+                <div class="col s2" id="menorLinha"></div>
+            </div>
+            <div class="row" id="linha2">
+                <div class="col s2">
+                </div>
+                <div class="col s8" id="menorColuna">
+                </div>
+            </div>
         </div>
-        <div class="col s6" id="cima">
-        </div>
+        
     </div>
-    <div class="row" id="linha1">
-        <div class="col s2" id="lado">
-        </div>
-        <div class="col s6" id="tabelaPai">
-            <form id="tabela"></form>
-        </div>
-        <div class="col s3" id="menorLinha">
-        </div>
+    <div class="center-align" id="next" onclick="action()">
+        <a class="waves-effect waves-light btn">Proxima Etapa</a>
     </div>
-
-    <div class="row" id="linha2">
-        <div class="col s2">
-        </div>
-        <div class="col s6" id="menorColuna">
-        </div>
-        <div class="col s3" id="next">
-            <button>Proxima Etapa</button>
-        </div>
-    </div>
-
 
     <script src="designacao.js"></script>
     <script src="main1.js"></script>
