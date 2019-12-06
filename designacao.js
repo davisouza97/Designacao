@@ -92,7 +92,7 @@ const designacao = {
             } else {
                 for (let i = 0; i < this.matriz.length; i++) { //escolhe a coluna
                     if (this.matrizEmparelhamento[i][indexMenorColuna] == 0) {
-                        this.setValidosInvalidos(indexMenorColuna, i);
+                        this.setValidosInvalidos(i, indexMenorColuna);
                     }
                 }
             }
@@ -172,6 +172,44 @@ const designacao = {
      * 0 = valor riscado
      * -1 = valor riscado (cruzamento)
      */
+
+    getMenorNaoColorido: function () {
+        let positionLinha;
+        let positionColuna;
+        let menor = 999999;
+        for (let i = 0; i < this.matriz.length; i++) {
+            for (let j = 0; j < this.matriz[i].length; j++) {
+                if (this.matrizCor[i][j] == 1) {
+                    if (this.matriz[i][j] < menor) {
+                        menor = this.matriz[i][j];
+                        positionLinha = i;
+                        positionColuna = j;
+                    }
+                }
+            }
+        }
+        console.log("o menor valor não colorido foi: " + menor);
+
+        return [menor, positionLinha, positionColuna];
+    },
+
+    subtraiSomaColoridos: function () {
+        let resultadoMenor = this.getMenorNaoColorido();
+        let menor = resultadoMenor[0];
+        //let linha = resultadoMenor[1];
+        //let coluna = resultadoMenor[2];
+        for (let i = 0; i < this.matriz.length; i++) {
+            for (let j = 0; j < this.matriz[i].length; j++) {
+                if (this.matrizCor[i][j] == 1) {
+                    this.matriz[i][j] = this.matriz[i][j] - menor;
+                }
+                if (this.matrizCor[i][j] == -1) {
+                    this.matriz[i][j] = this.matriz[i][j] + menor;
+                }
+
+            }
+        }
+    },
 
     getNumeroDesignacao: function () {
         let numeroDesignacao = 0;

@@ -1,4 +1,11 @@
 /*jshint esversion: 6 */
+
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, options);
+});
+
+
 var tabela = document.getElementById("tabela");
 var botaoNext = document.getElementById("next");
 var menorLinha = document.getElementById("menorLinha");
@@ -10,8 +17,8 @@ var qtdLinhas = 0;
 var qtdColunas = 0;
 var matrizOriginal;
 
-var row = prompt("Informe o tamanho da tabela");
-
+//var row = prompt("Informe o tamanho da tabela");
+var row = 4;
 var col = row;
 var acao = "montar";
 
@@ -53,6 +60,7 @@ function action() {
         if (designacao.verificaEmparelhado()) {
             botaoNext.childNodes[1].disabled = true;
         }
+        return;
     }
     if (acao === "menorColuna") {
         M.toast({
@@ -77,13 +85,66 @@ function action() {
             html: 'tenta atribuir um pra um'
         });
         coloreAtribuicao();
-        acao = "atribuicaoColuna";
         if (designacao.verificaEmparelhado()) {
             botaoNext.childNodes[1].disabled = true;
+        } else {
+            acao = "riscar";
         }
         return;
     }
-
+    if (acao === "riscar") {
+        designacao.etapaRiscos();
+        M.toast({
+            html: 'Riscando as Linhas/Colunas'
+        });
+        renderRisco();
+        acao = 'menor';
+        return;
+    }
+    if (acao === "menor") {
+        M.toast({
+            html: 'Pegando o menor colorido não riscado'
+        });
+        let posicao = [];
+        posicao.push(designacao.getMenorNaoColorido()[1]);
+        posicao.push(designacao.getMenorNaoColorido()[2]);
+        colorePosicao(posicao);
+        acao = "subtracaoCor";
+        return;
+    }
+    if (acao === "subtracaoCor") {
+        designacao.subtraiSomaColoridos();
+        M.toast({
+            html: 'Subtrai os não coloridos pelo menor'
+        });
+        M.toast({
+            html: 'Soma os cruzamentos pelo menor'
+        });
+        renderRisco();
+        acao = 'atribuicaoFinal';
+    }
+    if (acao === "atribuicaoFinal") {
+        designacao.atribuicao();
+        M.toast({
+            html: 'Tenta atribuir os valores'
+        });
+        renderMatriz();
+        coloreAtribuicao();
+        if (designacao.verificaEmparelhado()) {
+            botaoNext.childNodes[1].disabled = true;
+            acao = "fim";
+        } else {
+            acao = "riscar";
+        }
+        return;
+    }
+    if (acao === "fim") {
+        designacao.atribuicao();
+        M.toast({
+            html: 'resultado encontrado'
+        });
+        fim();
+    }
 }
 
 function montaTabela(row, col) {
@@ -120,6 +181,7 @@ function montaCima(n) {
         celula.setAttribute("class", "col s" + 12 / row);
         let input = document.createElement("input");
         input.setAttribute("placeholder", "descrição");
+        input.setAttribute("i", "cima" + i);
         celula.appendChild(input);
         linha.appendChild(celula);
     }
@@ -134,6 +196,7 @@ function montaLado(n) {
         celula.setAttribute("class", "col s9");
         let input = document.createElement("input");
         input.setAttribute("placeholder", "descrição");
+        input.setAttribute("i", "lado" + i);
         celula.appendChild(input);
         linha.appendChild(celula);
         ladoDiv.appendChild(linha);
@@ -163,9 +226,11 @@ function montaMatriz() {
 function renderMatriz() {
     while (tabela.firstChild) {
         tabela.removeChild(tabela.firstChild);
-    }while (menorLinha.firstChild) {
+    }
+    while (menorLinha.firstChild) {
         menorLinha.removeChild(menorLinha.firstChild);
-    }while (menorColuna.firstChild) {
+    }
+    while (menorColuna.firstChild) {
         menorColuna.removeChild(menorColuna.firstChild);
     }
 
@@ -216,10 +281,9 @@ function renderMenorColuna() {
 
 function coloreAtribuicao() {
     let matriz = designacao.matrizEmparelhamento;
-    let linha;
     for (let i = 0; i < matriz.length; i++) {
         for (let j = 0; j < matriz[i].length; j++) {
-            document.getElementById(i + "/" + j).style.backgroundColor = "gray";
+            //document.getElementById(i + "/" + j).style.backgroundColor = "gray";
             if (matriz[i][j] === -1) {
                 document.getElementById(i + "/" + j).style.backgroundColor = "green";
             }
@@ -228,4 +292,101 @@ function coloreAtribuicao() {
             }
         }
     }
+}
+
+function colorePosicao(posicao) {
+    document.getElementById(posicao[0] + "/" + posicao[1]).style.backgroundColor = "green";
+}
+
+function renderRisco() {
+    renderMatriz();
+    let matriz = designacao.matrizCor;
+    for (let i = 0; i < matriz.length; i++) {
+        for (let j = 0; j < matriz[i].length; j++) {
+            document.getElementById(i + "/" + j).style.backgroundColor = "";
+            if (matriz[i][j] === 0) {
+                document.getElementById(i + "/" + j).style.backgroundColor = "rgb(255,183,77)";
+            }
+            if (matriz[i][j] === -1) {
+                document.getElementById(i + "/" + j).style.backgroundColor = "rgb(230,81,0)";
+            }
+        }
+    }
+
+}
+
+
+function fim() {
+    let inicial = document.getElementById("matrixInicial");
+    let final = document.getElementById("matrixFinal");
+    let custos = document.getElementById("custos");
+
+    let matrizOriginal = designacao.matrizOriginal;
+    for (let i = 0; i < matrizOriginal.length; i++) {
+        linha = document.createElement("div");
+        linha.setAttribute("id", i);
+        linha.setAttribute("class", "row");
+
+        for (let j = 0; j < matrizOriginal[i].length; j++) {
+            let coluna = document.createElement("div");
+            coluna.setAttribute("id", i + "/" + j);
+            coluna.setAttribute("class", "col s" + 12 / row);
+            let celula = document.createElement("input");
+            celula.setAttribute("value", matrizOriginal[i][j]);
+            celula.readOnly = true;
+            coluna.appendChild(celula);
+            linha.appendChild(coluna);
+        }
+        inicial.appendChild(linha);
+    }
+
+
+    let matriz = designacao.matriz;
+    let desig = designacao.matrizEmparelhamento;
+    for (let i = 0; i < matriz.length; i++) {
+        linha = document.createElement("div");
+        linha.setAttribute("id", i);
+        linha.setAttribute("class", "row");
+        for (let j = 0; j < matriz[i].length; j++) {
+            let coluna = document.createElement("div");
+            if (desig[i][j] == -1) {
+                coluna.style.backgroundColor = "green";
+            }
+            if (desig[i][j] == -2) {
+                coluna.style.backgroundColor = "red";
+            }
+            coluna.setAttribute("id", i + "/" + j);
+            coluna.setAttribute("class", "col s" + 12 / row);
+            let celula = document.createElement("input");
+            celula.setAttribute("value", matriz[i][j]);
+            celula.readOnly = true;
+            coluna.appendChild(celula);
+            linha.appendChild(coluna);
+        }
+        final.appendChild(linha);
+    }
+
+    let custoTotal = 0;
+    let divLinha = document.createElement("div");
+    divLinha.setAttribute("class", "row");
+    custos.appendChild(divLinha);
+    
+    for (let i = 0; i < desig.length; i++) {
+        divLinha.setAttribute("class", "row");
+        custos.appendChild(divLinha);
+        for (let j = 0; j < desig[i].length; j++) {
+            if (desig[i][j] == -1) {
+                let nomeLado = document.createElement("div").setAttribute("class", "col s4");
+                nomeLado.innerText = document.getElementById("lado" + i).value;
+                let nomeCima = document.createElement("div").setAttribute("class", "col s4");
+                nomeCima.innerText = document.getElementById("cima" + j).value;
+                let custo = document.createElement("div").setAttribute("class", "col s4");
+                custo.innerText = matriz[i][j];
+                custoTotal += custo;
+            }
+        }
+    }
+
+    $('#modal').modal();
+    $('#modal').modal('open');
 }
