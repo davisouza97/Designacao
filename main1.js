@@ -56,9 +56,11 @@ function action() {
             html: 'tenta atribuir um pra um'
         });
         coloreAtribuicao();
-        acao = "menorColuna";
         if (designacao.verificaEmparelhado()) {
             botaoNext.childNodes[1].disabled = true;
+            acao = "fim";
+        } else {
+            acao = "menorColuna";
         }
         return;
     }
@@ -87,6 +89,7 @@ function action() {
         coloreAtribuicao();
         if (designacao.verificaEmparelhado()) {
             botaoNext.childNodes[1].disabled = true;
+            acao = "fim";
         } else {
             acao = "riscar";
         }
@@ -317,9 +320,23 @@ function renderRisco() {
 
 
 function fim() {
+
+    $('#modal').modal();
+    $('#modal').modal('open');
+
     let inicial = document.getElementById("matrixInicial");
     let final = document.getElementById("matrixFinal");
     let custos = document.getElementById("custos");
+
+    while (inicial.firstChild) {
+        inicial.removeChild(inicial.firstChild);
+    }
+    while (final.firstChild) {
+        final.removeChild(final.firstChild);
+    }
+    while (custos.firstChild) {
+        custos.removeChild(custos.firstChild);
+    }
 
     let matrizOriginal = designacao.matrizOriginal;
     for (let i = 0; i < matrizOriginal.length; i++) {
@@ -367,26 +384,34 @@ function fim() {
     }
 
     let custoTotal = 0;
-    let divLinha = document.createElement("div");
-    divLinha.setAttribute("class", "row");
-    custos.appendChild(divLinha);
-    
-    for (let i = 0; i < desig.length; i++) {
-        divLinha.setAttribute("class", "row");
-        custos.appendChild(divLinha);
-        for (let j = 0; j < desig[i].length; j++) {
-            if (desig[i][j] == -1) {
-                let nomeLado = document.createElement("div").setAttribute("class", "col s4");
-                nomeLado.innerText = document.getElementById("lado" + i).value;
-                let nomeCima = document.createElement("div").setAttribute("class", "col s4");
-                nomeCima.innerText = document.getElementById("cima" + j).value;
-                let custo = document.createElement("div").setAttribute("class", "col s4");
-                custo.innerText = matriz[i][j];
-                custoTotal += custo;
+    for (let i = 0; i < matriz.length; i++) {
+        let linha = document.createElement("div");
+        linha.setAttribute("class", "row");
+        for (let j = 0; j < designacao.matrizEmparelhamento.length; j++) {
+            let col1 = document.createElement("div");
+            col1.setAttribute("class", "col s4");
+            let col2 = document.createElement("div");
+            col2.setAttribute("class", "col s4");
+            let col3 = document.createElement("div");
+            col3.setAttribute("class", "col s4");
+            if (designacao.matrizEmparelhamento[i][j] == -1) {
+                console.log(document.getElementById("lado" + i));
+                console.log("lado" + i);
+                
+                
+                col1.innerText = document.getElementById("lado" + i).value;
+                col2.innerText = document.getElementById("cima" + j).value;
+                let valor = designacao.matrizOriginal[i][j];
+                custoTotal += valor;
+                col3.innerText = valor;
+                linha.appendChild(col1);
+                linha.appendChild(col2);
+                linha.appendChild(col3);
+                final.appendChild(linha);
+                break;
             }
         }
     }
 
-    $('#modal').modal();
-    $('#modal').modal('open');
+
 }
