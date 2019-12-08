@@ -17,8 +17,7 @@ var qtdLinhas = 0;
 var qtdColunas = 0;
 var matrizOriginal;
 
-//var row = prompt("Informe o tamanho da tabela");
-var row = 4;
+var row = prompt("Informe o tamanho da tabela");
 var col = row;
 var acao = "montar";
 
