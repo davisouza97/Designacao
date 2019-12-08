@@ -9,7 +9,7 @@ var matrizOriginal;
 var col = 3;
 var row = 3;
 var row = prompt("Informe o numero de linhas");
-var col = prompt("Informe o numero de linhas");
+var col = prompt("Informe o numero de colunas");
 
 
 
@@ -30,12 +30,12 @@ function start() {
     designacao.criaMatriz(criaMatriz);
     matrizOriginal = designacao.matriz;
     let entrada = document.getElementById("entrada");
-    
+
     renderMatriz();
     while (entrada.firstChild) {
         entrada.removeChild(entrada.firstChild);
     }
-    
+
 }
 
 function montaTabela(row, col) {
@@ -115,7 +115,9 @@ function renderMatriz() {
     }
     render.appendChild(tabela);
     let botao = document.createElement("button");
-    botao.setAttribute("onclick",next);
+    let textoBotao = document.createTextNode("Proxima Etapa");
+    botao.appendChild(textoBotao);
+    botao.setAttribute("onclick", next);
     render.appendChild(botao);
 }
 
