@@ -18,10 +18,12 @@ const designacao = {
     itensColuna: [],
     criaMatriz: function (matrizEntrada) {
         this.matriz = matrizEntrada;
-        this.matrizOriginal = matrizEntrada;
         this.matrizEmparelhamento = new Array(this.matriz.length);
         this.matrizEmparelhamentoTransposta = new Array(this.matriz.length);
         this.matrizCor = new Array(this.matriz.length);
+        for (let i = 0; i < this.matriz.length; i++) {
+            this.matrizOriginal[i] = this.matriz[i].map(item => (parseInt(item, 10) * 1));
+        }
         for (let i = 0; i < this.matriz.length; i++) {
             this.matrizEmparelhamento[i] = this.matriz[i].map(item => (parseInt(item, 10) * 0) + 1);
         }
